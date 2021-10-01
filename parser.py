@@ -84,9 +84,19 @@ def parse(string):
         if liste[x][0] in NUMBERS:
             liste[x] = Number(liste[x])
 
-    while '*' in liste:
-        index = liste.index('*')
-        liste[index] = dOperator(liste[index-1],liste[index+1],OP_MULT)
+    while '*' in liste or '/' in liste:
+        mindex,dindex = float('inf'),float('inf')
+        if '*' in liste:
+            mindex = liste.index('*')
+
+        if '/' in liste:
+            dindex = liste.index('/')
+        if mindex>dindex:
+            index = dindex
+            liste[index] = dOperator(liste[index-1],liste[index+1],OP_DIV)
+        else:
+            index = mindex
+            liste[index] = dOperator(liste[index-1],liste[index+1],OP_MULT)
         liste.pop(index-1)
         liste.pop(index)
     
@@ -95,6 +105,8 @@ def parse(string):
         liste[index] = dOperator(liste[index-1],liste[index+1],OP_PLUS)
         liste.pop(index-1)
         liste.pop(index)
+
+
 
     return liste[0].operate()
 
