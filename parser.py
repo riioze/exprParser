@@ -100,9 +100,19 @@ def parse(string):
         liste.pop(index-1)
         liste.pop(index)
     
-    while '+' in liste:
-        index = liste.index('+')
-        liste[index] = dOperator(liste[index-1],liste[index+1],OP_PLUS)
+    while '+' in liste or '-' in liste:
+        pindex,mindex = float('inf'),float('inf')
+        if '+' in liste:
+            pindex = liste.index('+')
+
+        if '-' in liste:
+            mindex = liste.index('-')
+        if mindex>pindex:
+            index = pindex
+            liste[index] = dOperator(liste[index-1],liste[index+1],OP_PLUS)
+        else:
+            index = mindex
+            liste[index] = dOperator(liste[index-1],liste[index+1],OP_MINUS)
         liste.pop(index-1)
         liste.pop(index)
 
