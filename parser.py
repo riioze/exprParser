@@ -39,7 +39,7 @@ class Number(part):
     def operate(self):
         return self.value
     def __repr__(self):
-        return str(self.value)
+        return f' num: {self.value}'
 
 class dOperator(part):
     def __init__(self,p1,p2,opFunc):
@@ -79,11 +79,23 @@ def split(string):
 def parse(string):
     liste = split(string)
     Buff = []
+    # convert num to tokens
+    for x in range(len(liste)):
+        if liste[x][0] in NUMBERS:
+            liste[x] = Number(liste[x])
+
     while '*' in liste:
         index = liste.index('*')
-        liste[index] = dOperator(Number(liste[index-1]),Number(liste[index+1]),OP_MULT)
+        liste[index] = dOperator(liste[index-1],liste[index+1],OP_MULT)
         liste.pop(index-1)
         liste.pop(index)
+    
+    while '+' in liste:
+        index = liste.index('+')
+        liste[index] = dOperator(liste[index-1],liste[index+1],OP_PLUS)
+        liste.pop(index-1)
+        liste.pop(index)
+
     return liste[0].operate()
 
 
